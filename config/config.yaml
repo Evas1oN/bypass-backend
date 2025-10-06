@@ -1,0 +1,6 @@
+database:
+  url: postgres://bypass:bypass@localhost:5432/bypass
+
+server:
+  address: 127.0.0.1
+  port: 8080
