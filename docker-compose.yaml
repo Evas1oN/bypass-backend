@@ -6,5 +6,28 @@ services:
       POSTGRES_PASSWORD: postgres
     ports:
       - 5432:5432
+    user: postgres
     volumes:
       - ./scripts/db:/docker-entrypoint-initdb.d/:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready", "-U postgres"]
+      start_period: 5s
+      interval: 10s
+      retries: 5
+
+
+  migrations:
+    build:
+      context: scripts/deploy/docker
+      dockerfile: goose.dockerfile
+    environment:
+      GOOSE_DRIVER: postgres
+      GOOSE_DBSTRING: postgres://bypass:bypass@db:5432/bypass
+      GOOSE_MIGRATION_DIR: /migrations
+    volumes:
+      - ./migrations:/migrations:ro
+    depends_on:
+      db:
+        condition: service_healthy
+    command: ["up"]
+

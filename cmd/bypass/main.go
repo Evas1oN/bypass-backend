@@ -1,8 +1,11 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"pavrat/bypass/internal/config"
+
+	"github.com/gin-gonic/gin"
 )
 
 func main() {
@@ -12,5 +15,13 @@ func main() {
 		log.Fatalln(err)
 	}
 
-	log.Println(config.Database.Url)
+	// todo: Connect to DB
+
+	r := gin.Default()
+
+	r.POST("/addUser", func(ctx *gin.Context) {
+		// todo SELECT nextval('ipaddress')
+	})
+
+	r.Run(fmt.Sprintf("%s:%s", config.Server.Address, config.Server.Port))
 }
